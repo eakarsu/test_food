@@ -18,7 +18,8 @@
     "react-query": "^3.39.3",
     "zustand": "^4.4.7",
     "framer-motion": "^10.16.16",
-    "lucide-react": "^0.294.0"
+    "lucide-react": "^0.294.0",
+    "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
