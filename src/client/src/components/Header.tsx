@@ -1,9 +1,17 @@
-import { Link } from 'react-router-dom';
-import { User, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { User, LogOut, Shield } from 'lucide-react';
+import { useAuthStore } from '../stores/authStore';
+import toast from 'react-hot-toast';
 
 const Header = () => {
-  // This would normally come from your auth store/context
-  const isAuthenticated = false;
+  const { isAuthenticated, user, logout, isAdmin } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    toast.success('Logged out');
+    navigate('/');
+  };
 
   return (
     <header className="bg-white shadow-sm border-b">
@@ -14,42 +22,39 @@ const Header = () => {
               Modern Website
             </Link>
           </div>
-          
+
           <nav className="hidden md:flex space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-gray-900 transition-colors">
-              Home
-            </Link>
-            <Link to="/about" className="text-gray-700 hover:text-gray-900 transition-colors">
-              About
-            </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-gray-900 transition-colors">
-              Contact
-            </Link>
+            <Link to="/" className="text-gray-700 hover:text-gray-900 transition-colors">Home</Link>
+            {isAuthenticated && (
+              <>
+                <Link to="/dashboard" className="text-gray-700 hover:text-gray-900 transition-colors">Dashboard</Link>
+                <Link to="/posts" className="text-gray-700 hover:text-gray-900 transition-colors">Posts</Link>
+                <Link to="/files" className="text-gray-700 hover:text-gray-900 transition-colors">Files</Link>
+                {isAdmin() && (
+                  <Link to="/users" className="text-gray-700 hover:text-gray-900 transition-colors flex items-center gap-1">
+                    <Shield className="w-4 h-4" /> Users
+                  </Link>
+                )}
+              </>
+            )}
           </nav>
 
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <>
-                <Link
-                  to="/dashboard"
-                  className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors"
-                >
+                <Link to="/profile" className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors">
                   <User size={20} />
-                  <span>Dashboard</span>
+                  <span className="hidden sm:inline">{user?.firstName}</span>
                 </Link>
-                <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors">
+                <button onClick={handleLogout} className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors">
                   <LogOut size={20} />
-                  <span>Logout</span>
+                  <span className="hidden sm:inline">Logout</span>
                 </button>
               </>
             ) : (
               <>
-                <Link to="/login" className="btn btn-secondary">
-                  Login
-                </Link>
-                <Link to="/register" className="btn btn-primary">
-                  Register
-                </Link>
+                <Link to="/login" className="btn btn-secondary">Login</Link>
+                <Link to="/register" className="btn btn-primary">Register</Link>
               </>
             )}
           </div>
