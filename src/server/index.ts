@@ -56,8 +56,8 @@ app.use('*', (req, res) => {
 
 const PORT = config.port;
 
-app.listen(PORT, () => {
-  logger.info(`Server running on port ${PORT}`);
+app.listen(PORT, config.host, () => {
+  logger.info(`Server running at http://${config.host}:${PORT}`);
   logger.info(`Environment: ${config.nodeEnv}`);
 });
 

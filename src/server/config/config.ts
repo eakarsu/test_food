@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 const configSchema = z.object({
+  host: z.string().default('127.0.0.1'),
   port: z.number().default(3001),
   nodeEnv: z.enum(['development', 'production', 'test']).default('development'),
   databaseUrl: z.string(),
@@ -17,6 +18,7 @@ const configSchema = z.object({
 });
 
 const env = {
+  host: process.env.HOST || '127.0.0.1',
   port: parseInt(process.env.PORT || '3001'),
   nodeEnv: process.env.NODE_ENV || 'development',
   databaseUrl: process.env.DATABASE_URL || '',

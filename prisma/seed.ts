@@ -6,18 +6,29 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Seeding database...');
 
+  const adminEmail = process.env.SEED_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+  const userEmail = process.env.SEED_USER_EMAIL;
+  const userPassword = process.env.SEED_USER_PASSWORD;
+
+  if (!adminEmail || !adminPassword || !userEmail || !userPassword) {
+    throw new Error(
+      'SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD, SEED_USER_EMAIL, and SEED_USER_PASSWORD are required'
+    );
+  }
+
   // Clean existing data
   await prisma.file.deleteMany();
   await prisma.post.deleteMany();
   await prisma.user.deleteMany();
 
-  const hashedAdmin = await bcrypt.hash('Admin123!', 12);
-  const hashedUser = await bcrypt.hash('User123!', 12);
+  const hashedAdmin = await bcrypt.hash(adminPassword, 12);
+  const hashedUser = await bcrypt.hash(userPassword, 12);
 
   // Create 2 admins
   const admin1 = await prisma.user.create({
     data: {
-      email: 'admin@example.com',
+      email: adminEmail,
       password: hashedAdmin,
       firstName: 'Admin',
       lastName: 'User',
@@ -45,7 +56,7 @@ async function main() {
   for (let i = 0; i < 15; i++) {
     const user = await prisma.user.create({
       data: {
-        email: `user${i + 1}@example.com`,
+        email: i === 0 ? userEmail : `user${i + 1}@example.test`,
         password: hashedUser,
         firstName: firstNames[i],
         lastName: lastNames[i],
@@ -142,8 +153,8 @@ async function main() {
 
   console.log(`Created ${fileData.length} files`);
   console.log('\nSeed completed!');
-  console.log('Admin login: admin@example.com / Admin123!');
-  console.log('User login: user1@example.com / User123!');
+  console.log(`Seeded admin account: ${adminEmail}`);
+  console.log(`Seeded user account: ${userEmail}`);
 }
 
 main()

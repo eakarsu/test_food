@@ -2,7 +2,7 @@
   "name": "modern-fullstack-website",
   "version": "1.0.0",
   "description": "A modern full-stack website with React, Node.js, and PostgreSQL",
-  "main": "dist/server/index.js",
+  "main": "dist/server/server/index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "nodemon --exec ts-node src/server/index.ts",
@@ -10,7 +10,7 @@
     "build": "npm run build:server && npm run build:client",
     "build:server": "tsc -p tsconfig.server.json",
     "build:client": "cd src/client && npm run build",
-    "start": "node dist/server/index.js",
+    "start": "node dist/server/server/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "db:generate": "prisma generate",
