@@ -56,7 +56,9 @@ async function main() {
   for (let i = 0; i < 15; i++) {
     const user = await prisma.user.create({
       data: {
-        email: i === 0 ? userEmail : `user${i + 1}@example.test`,
+        email: i === 0 && userEmail.toLowerCase() !== adminEmail.toLowerCase()
+          ? userEmail
+          : `user${i + 1}@example.test`,
         password: hashedUser,
         firstName: firstNames[i],
         lastName: lastNames[i],
