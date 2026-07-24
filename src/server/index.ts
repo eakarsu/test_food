@@ -10,6 +10,7 @@ import { userRoutes } from './routes/users';
 import { postRoutes } from './routes/posts';
 import { fileRoutes } from './routes/files';
 import { exportRoutes } from './routes/exports';
+import { runtimeAiRoutes } from './routes/runtimeAi';
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/runtime-ai', runtimeAiRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/files', fileRoutes);
