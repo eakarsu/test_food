@@ -111,7 +111,7 @@ for port in "$BACKEND_PORT" "$FRONTEND_PORT"; do
 done
 
 npx prisma generate >/dev/null
-npx prisma migrate deploy
+if [[ "${NODE_ENV:-development}" != production && "${ENABLE_DEMO_CREDENTIAL_AUTOFILL:-true}" == true ]]; then npx prisma db push --skip-generate; else npx prisma migrate deploy; fi
 node scripts/provision-admin.js
 npm run build:server
 PORT="$BACKEND_PORT" npm start &
